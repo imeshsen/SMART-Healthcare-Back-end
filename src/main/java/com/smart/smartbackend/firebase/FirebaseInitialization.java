@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Service
@@ -15,19 +16,13 @@ public class FirebaseInitialization {
     public void initialization() throws IOException {
 
         FileInputStream serviceAccount =
-                null;
-        try {
-            serviceAccount = new FileInputStream("./serviceAccountKey.json");
+                new FileInputStream("./serviceAccKey.json");
 
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .build();
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
-
-            FirebaseApp.initializeApp(options);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        FirebaseApp.initializeApp(options);
 
     }
 }
